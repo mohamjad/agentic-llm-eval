@@ -1,0 +1,23 @@
+{
+  "evaluator": {
+    "timeout": 300,
+    "max_retries": 3,
+    "parallel": false
+  },
+  "metrics": {
+    "accuracy_weight": 0.4,
+    "efficiency_weight": 0.3,
+    "tool_usage_weight": 0.2,
+    "safety_weight": 0.1
+  },
+  "benchmark": {
+    "tasks_file": "configs/tasks.json",
+    "shuffle": false,
+    "max_tasks": null
+  },
+  "output": {
+    "results_dir": "results",
+    "format": "json",
+    "save_traces": true
+  }
+}
