@@ -185,6 +185,7 @@ class TestRLTrainer:
         
         assert isinstance(metrics, dict)
         # Metrics might be empty if evaluation fails, so just check it's a dict
+        # Don't assert length > 0 as metrics might legitimately be empty
     
     def test_train_single_episode(self):
         """Test training for one episode"""
@@ -200,9 +201,11 @@ class TestRLTrainer:
         tasks_per_episode = min(2, len(benchmark.tasks))
         result = trainer.train(episodes=1, tasks_per_episode=tasks_per_episode, update_policy=False)
         
+        assert isinstance(result, dict)
         assert "final_params" in result
         assert "final_metrics" in result
         assert "history" in result
+        assert isinstance(result["history"], list)
         assert len(result["history"]) == 1
     
     def test_get_best_parameters(self):
