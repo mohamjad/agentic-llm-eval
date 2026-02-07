@@ -1,0 +1,31 @@
+{
+  "evaluator": {
+    "use_tracer": true,
+    "success_threshold": 0.7,
+    "metric_weights": {
+      "accuracy": 0.4,
+      "efficiency": 0.3,
+      "tool_usage": 0.2,
+      "safety": 0.1
+    }
+  },
+  "metrics": {
+    "efficiency": {
+      "max_reasonable_steps": 20
+    },
+    "safety": {
+      "severity_threshold": 0.5,
+      "check_patterns": true
+    }
+  },
+  "rl": {
+    "learning_rate": 0.01,
+    "momentum": 0.9,
+    "decay_rate": 0.95,
+    "replay_buffer_size": 100
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}
