@@ -12,13 +12,17 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="agentic-llm-eval",
-    version="0.1.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    version="0.2.0",
+    author="mohamjad",
     description="A comprehensive framework for evaluating agentic LLM behavior",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/agentic-llm-eval",
+    url="https://github.com/mohamjad/agentic-llm-eval",
+    project_urls={
+        "Documentation": "https://github.com/mohamjad/agentic-llm-eval/tree/main/docs",
+        "Source": "https://github.com/mohamjad/agentic-llm-eval",
+        "Tracker": "https://github.com/mohamjad/agentic-llm-eval/issues",
+    },
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
