@@ -17,11 +17,11 @@ setup(
     description="A comprehensive framework for evaluating agentic LLM behavior",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/mohamjad/agentic-llm-eval",
+    url="https://github.com/mohamjad/system-eval2",
     project_urls={
-        "Documentation": "https://github.com/mohamjad/agentic-llm-eval/tree/main/docs",
-        "Source": "https://github.com/mohamjad/agentic-llm-eval",
-        "Tracker": "https://github.com/mohamjad/agentic-llm-eval/issues",
+        "Documentation": "https://github.com/mohamjad/system-eval2/tree/main/docs",
+        "Source": "https://github.com/mohamjad/system-eval2",
+        "Tracker": "https://github.com/mohamjad/system-eval2/issues",
     },
     packages=find_packages(),
     classifiers=[
