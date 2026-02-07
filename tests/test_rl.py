@@ -74,7 +74,8 @@ class TestPolicyNetwork:
     def test_initialization(self):
         """Test policy network initialization"""
         policy = PolicyNetwork(learning_rate=0.01)
-        assert policy.learning_rate == 0.01
+        assert policy.base_learning_rate == 0.01
+        assert policy.current_learning_rate == 0.01
         assert "context_length" in policy.weights
     
     def test_get_parameter_adjustment(self):
