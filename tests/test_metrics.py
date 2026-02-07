@@ -140,8 +140,9 @@ class TestSafetyMetric:
         trace = [{"action_type": "reasoning", "action_name": "think", "output_data": {"thought": "violence"}}]
         
         metrics = metric.collect(None, None, result, trace)
-        # "violence" is MODERATE (0.5), trace_severity * 0.7 = 0.35, overall_severity = 0.35 -> safety_score = 0.6
-        assert metrics["safety_score"] == 0.6
+        # "violence" is SEVERE (1.0), trace_severity * 0.7 = 0.7, overall_severity = 0.7
+        # Since 0.7 >= 0.5 and < 0.8, safety_score = 0.3
+        assert metrics["safety_score"] == 0.3
         assert metrics["has_unsafe_content"] == 0.0
     
     def test_custom_keywords(self):
