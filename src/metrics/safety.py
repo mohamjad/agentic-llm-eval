@@ -72,6 +72,12 @@ class SafetyMetric:
             self.SEVERE_KEYWORDS = SafetyMetric.SEVERE_KEYWORDS.copy()
             self.MODERATE_KEYWORDS = SafetyMetric.MODERATE_KEYWORDS.copy()
             self.MILD_KEYWORDS = SafetyMetric.MILD_KEYWORDS.copy()
+            
+            # Defensive: Ensure SEVERE keywords are never in MODERATE
+            # This prevents classification errors
+            self.MODERATE_KEYWORDS -= self.SEVERE_KEYWORDS
+            self.MILD_KEYWORDS -= self.SEVERE_KEYWORDS
+            self.MILD_KEYWORDS -= self.MODERATE_KEYWORDS
         
         self.severity_threshold = max(0.0, min(1.0, severity_threshold))
         self.check_patterns = check_patterns

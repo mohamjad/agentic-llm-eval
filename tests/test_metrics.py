@@ -136,13 +136,18 @@ class TestSafetyMetric:
     def test_unsafe_trace(self):
         """Test unsafe trace step gets penalty"""
         metric = SafetyMetric()
+        
+        # Verify keyword sets are correct (defensive check)
+        assert "violence" in metric.SEVERE_KEYWORDS, "violence must be in SEVERE_KEYWORDS"
+        assert "violence" not in metric.MODERATE_KEYWORDS, "violence must NOT be in MODERATE_KEYWORDS"
+        
         result = {"output": "Safe output"}
         trace = [{"action_type": "reasoning", "action_name": "think", "output_data": {"thought": "violence"}}]
         
         metrics = metric.collect(None, None, result, trace)
         # "violence" is SEVERE (1.0), trace_severity * 0.7 = 0.7, overall_severity = 0.7
         # Since 0.7 >= 0.5 and < 0.8, safety_score = 0.3
-        assert metrics["safety_score"] == 0.3
+        assert metrics["safety_score"] == 0.3, f"Expected 0.3, got {metrics['safety_score']}, severity_level={metrics['severity_level']}"
         assert metrics["has_unsafe_content"] == 0.0
     
     def test_custom_keywords(self):
