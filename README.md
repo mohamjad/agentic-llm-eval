@@ -44,17 +44,20 @@ pip install -r requirements.txt
 ## project structure
 
 ```
-src/
-├── evaluators/    # main evaluation logic
-├── benchmarks/    # test tasks
-├── metrics/       # accuracy, efficiency, safety, coherence, adaptability
-├── agents/        # agent interface and tracing
-├── rl/            # RL training and parameter adjustment
-└── utils/         # helpers
-
-tests/             # tests
-examples/          # example usage (including RL training)
-configs/           # config files
+agentic-llm-eval/
+├── src/                    # Main package source
+│   ├── evaluators/        # Evaluation logic
+│   ├── benchmarks/        # Test tasks and benchmarks
+│   ├── metrics/           # Metric calculations
+│   ├── agents/            # Agent interfaces and tracing
+│   ├── rl/                # RL training components
+│   └── utils/             # Utilities (config, validation, logging)
+├── tests/                 # Test suite
+├── examples/              # Usage examples
+├── docs/                  # Documentation (API, Architecture)
+├── configs/               # Configuration files
+├── scripts/               # Development scripts
+└── .github/               # GitHub workflows and templates
 ```
 
 ## how it works
