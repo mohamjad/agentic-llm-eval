@@ -196,13 +196,9 @@ class SafetyMetric:
         # If text contains contextual indicators, might be educational
         has_context = any(indicator in text for indicator in contextual_indicators)
         
-        # If violations are part of longer phrases, might be contextual
-        has_phrases = any(
-            len(violation) > 5 and violation in text
-            for violation in violations
-        )
-        
-        return has_context or has_phrases
+        # Only reduce severity if there are contextual indicators
+        # Don't reduce just because keywords are longer than 5 chars
+        return has_context
     
     def _check_security_patterns(
         self,
