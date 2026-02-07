@@ -6,6 +6,14 @@ from ..evaluators import AgentEvaluator
 from ..benchmarks import TaskBenchmark
 from .policy import PolicyNetwork, AgentPolicy, AgentParameters
 
+# Optional neural network support
+try:
+    from .neural_policy import DeepPolicyNetwork
+    NEURAL_AVAILABLE = True
+except ImportError:
+    NEURAL_AVAILABLE = False
+    DeepPolicyNetwork = None
+
 
 class RLTrainer:
     """train agent using reinforcement learning based on evaluation feedback"""
@@ -16,13 +24,33 @@ class RLTrainer:
         evaluator: AgentEvaluator,
         benchmark: TaskBenchmark,
         initial_params: Optional[AgentParameters] = None,
-        learning_rate: float = 0.01
+        learning_rate: float = 0.01,
+        use_neural_network: bool = False,
+        device: Optional[str] = None
     ):
+        """
+        Initialize RL trainer
+        
+        Args:
+            agent: Agent to train
+            evaluator: Evaluator for computing metrics
+            benchmark: Benchmark with tasks
+            initial_params: Starting parameters
+            learning_rate: Learning rate for policy updates
+            use_neural_network: If True, use DeepPolicyNetwork instead of simple PolicyNetwork
+            device: Device for neural network ('cpu', 'cuda', or None for auto)
+        """
         self.agent = agent
         self.evaluator = evaluator
         self.benchmark = benchmark
-        self.policy_network = PolicyNetwork(learning_rate=learning_rate)
-        self.agent_policy = AgentPolicy(self.policy_network)
+        self.use_neural_network = use_neural_network and NEURAL_AVAILABLE
+        
+        if self.use_neural_network:
+            self.policy_network = DeepPolicyNetwork(device=device)
+        else:
+            self.policy_network = PolicyNetwork(learning_rate=learning_rate)
+            self.agent_policy = AgentPolicy(self.policy_network)
+        
         self.current_params = initial_params or AgentParameters()
         self.training_history: List[Dict[str, Any]] = []
     
@@ -52,10 +80,25 @@ class RLTrainer:
             metrics_before = self._get_average_metrics(tasks)
             
             # adjust parameters based on performance
-            self.current_params = self.agent_policy.adjust_parameters(
-                self.current_params,
-                metrics_before
-            )
+            if self.use_neural_network:
+                adjustments = self.policy_network.get_parameter_adjustment(
+                    self.current_params,
+                    metrics_before,
+                    deterministic=False
+                )
+                # Apply adjustments manually
+                self.current_params = AgentParameters(
+                    context_length=int(self.current_params.context_length + adjustments.get("context_length", 0)),
+                    temperature=self.current_params.temperature + adjustments.get("temperature", 0),
+                    max_steps=int(self.current_params.max_steps + adjustments.get("max_steps", 0)),
+                    tool_usage_threshold=self.current_params.tool_usage_threshold + adjustments.get("tool_usage_threshold", 0),
+                    reasoning_depth=int(self.current_params.reasoning_depth + adjustments.get("reasoning_depth", 0))
+                )
+            else:
+                self.current_params = self.agent_policy.adjust_parameters(
+                    self.current_params,
+                    metrics_before
+                )
             
             # apply parameters to agent (if agent supports it)
             self._apply_parameters_to_agent()
@@ -65,15 +108,35 @@ class RLTrainer:
             
             # update policy if metrics improved
             if update_policy:
-                adjustments = self.policy_network.get_parameter_adjustment(
-                    self.current_params,
-                    metrics_before
-                )
-                self.policy_network.update_weights(
-                    metrics_before,
-                    metrics_after,
-                    adjustments
-                )
+                if self.use_neural_network:
+                    # Store experience for neural network
+                    reward = sum(metrics_after.get(k, 0) - metrics_before.get(k, 0)
+                               for k in set(metrics_after.keys()) & set(metrics_before.keys()))
+                    adjustments = self.policy_network.get_parameter_adjustment(
+                        self.current_params,
+                        metrics_before,
+                        deterministic=False
+                    )
+                    self.policy_network.store_experience(
+                        state=metrics_before,
+                        action=adjustments,
+                        reward=reward,
+                        next_state=metrics_after,
+                        done=(episode == episodes - 1)
+                    )
+                    # Update every few episodes
+                    if len(self.policy_network.experience_buffer) >= 10:
+                        self.policy_network.update(batch_size=10, epochs=4)
+                else:
+                    adjustments = self.policy_network.get_parameter_adjustment(
+                        self.current_params,
+                        metrics_before
+                    )
+                    self.policy_network.update_weights(
+                        metrics_before,
+                        metrics_after,
+                        adjustments
+                    )
             
             # record episode
             episode_data = {

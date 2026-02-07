@@ -1,6 +1,6 @@
 # agentic llm behavior evaluation
 
-framework for evaluating agentic llm behavior with RL-based fine-tuning. tracks accuracy, efficiency, safety, coherence, adaptability, and tool usage with full execution traces.
+A comprehensive framework for evaluating agentic LLM behavior with deep reinforcement learning, semantic analysis, and Bayesian optimization. Features neural network-based policy gradients (PPO), embedding-based metrics, statistical significance testing, and theoretical foundations.
 
 ## what it does
 
