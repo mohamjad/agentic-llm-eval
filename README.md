@@ -97,6 +97,47 @@ see `METRICS.md` for detailed explanation of:
 - how parameters affect behavior
 - RL training parameters
 
+## testing
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ -v --cov=src --cov-report=html
+
+# Run specific test file
+pytest tests/test_evaluator.py -v
+```
+
+## code quality
+
+```bash
+# Format code
+black src tests
+
+# Lint
+flake8 src tests
+
+# Type check
+mypy src
+
+# Run all checks
+make quality
+```
+
+## contributing
+
+see `CONTRIBUTING.md` for guidelines.
+
+## architecture
+
+see `docs/ARCHITECTURE.md` for detailed architecture documentation.
+
+## api reference
+
+see `docs/API.md` for complete API documentation.
+
 ## license
 
 MIT
