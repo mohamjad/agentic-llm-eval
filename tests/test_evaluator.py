@@ -45,6 +45,9 @@ def test_evaluator_initialization():
     """Test evaluator can be initialized with explicit configuration"""
     evaluator = AgentEvaluator()
     assert evaluator is not None
+    assert hasattr(evaluator, 'use_tracer')
+    assert hasattr(evaluator, 'success_threshold')
+    assert hasattr(evaluator, 'metric_weights')
     assert evaluator.use_tracer is True  # Default value
     assert evaluator.success_threshold == 0.7  # Default value
     assert "accuracy" in evaluator.metric_weights
