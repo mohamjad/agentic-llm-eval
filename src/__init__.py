@@ -6,10 +6,10 @@ fine-tuning. Tracks accuracy, efficiency, safety, coherence, adaptability,
 and tool usage with full execution traces.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "mohamjad"
 __email__ = ""
-__url__ = "https://github.com/mohamjad/agentic-llm-eval"
+__url__ = "https://github.com/mohamjad/system-eval2"
 
 # Main exports for easy importing
 from .evaluators import AgentEvaluator, BaseEvaluator, EvaluationResult

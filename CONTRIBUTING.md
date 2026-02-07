@@ -1,99 +1,17 @@
 # Contributing to agentic-llm-eval
 
-Thank you for your interest in contributing! This document provides guidelines and instructions for contributing.
+Thanks for your interest in contributing. This document provides guidelines and instructions.
 
-## Development Setup
+For development setup, fork and clone the repository, create a virtual environment with python -m venv venv and activate it, install dependencies with pip install -r requirements.txt and pip install -e ".[dev]", then run tests with pytest tests/ -v.
 
-1. **Fork and clone the repository**
-   ```bash
-   git clone https://github.com/mohamjad/agentic-llm-eval.git
-   cd agentic-llm-eval
-   ```
+Code style uses black for formatting with line length 127, follows flake8 guidelines for linting, uses type hints for all functions, and uses Google-style docstrings. Format code with black src tests, check linting with flake8 src tests, and type check with mypy src.
 
-2. **Create a virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+To make changes, create a branch with git checkout -b feature/your-feature-name, make your changes with clear documented code, add tests for new functionality, update documentation as needed, run tests and checks with make quality and pytest tests/ -v, commit with clear descriptive messages following conventional commit format when possible, then push and create a pull request.
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   pip install -e ".[dev]"
-   ```
+Testing guidelines include writing tests for all new features, ensuring existing tests pass, aiming for high test coverage, and using descriptive test names.
 
-4. **Run tests**
-   ```bash
-   pytest tests/ -v
-   ```
+Documentation should be updated in README.md for user-facing changes, API.md for API changes, and include docstrings for all public functions and classes with examples when helpful.
 
-## Code Style
-
-- **Formatting**: Use `black` with line length 127
-- **Linting**: Follow `flake8` guidelines
-- **Type hints**: Use type hints for all functions
-- **Docstrings**: Use Google-style docstrings
-
-```bash
-# Format code
-black src tests
-
-# Check linting
-flake8 src tests
-
-# Type checking
-mypy src
-```
-
-## Making Changes
-
-1. **Create a branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **Make your changes**
-   - Write clear, documented code
-   - Add tests for new functionality
-   - Update documentation as needed
-
-3. **Run tests and checks**
-   ```bash
-   make quality  # Runs all quality checks
-   pytest tests/ -v  # Run tests
-   ```
-
-4. **Commit your changes**
-   - Use clear, descriptive commit messages
-   - Follow conventional commit format when possible
-
-5. **Push and create PR**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-## Testing Guidelines
-
-- Write tests for all new features
-- Ensure existing tests pass
-- Aim for high test coverage
-- Use descriptive test names
-
-## Documentation
-
-- Update README.md for user-facing changes
-- Update API.md for API changes
-- Add docstrings to all public functions/classes
-- Include examples in docstrings when helpful
-
-## Pull Request Process
-
-1. Ensure all tests pass
-2. Update documentation
-3. Add changelog entry if needed
-4. Request review
-5. Address feedback
-
-## Questions?
+The pull request process involves ensuring all tests pass, updating documentation, adding changelog entry if needed, requesting review, and addressing feedback.
 
 Open an issue for questions or discussions about contributions.

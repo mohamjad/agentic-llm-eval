@@ -1,171 +1,29 @@
 # Architecture Documentation
 
-## Overview
+The agentic-llm-eval framework uses a modular, extensible architecture that separates concerns and enables easy customization. Everything is designed to be explicit and traceable, with clear interfaces between components.
 
-The agentic-llm-eval framework is designed with a modular, extensible architecture that separates concerns and enables easy customization.
+Evaluators live in src/evaluators and orchestrate evaluation workflows while aggregating metrics. BaseEvaluator defines the abstract evaluation interface, while AgentEvaluator implements the comprehensive evaluation logic. These components execute agents on tasks, collect metrics from multiple sources, calculate overall scores, and determine success or failure.
 
-## Core Components
+Agents are defined in src/agents and provide the interface for agent execution along with execution tracing. BaseAgent is the abstract interface that agents must implement. AgentExecutionTrace tracks execution steps, and AgentTracer provides automatic tracing wrappers. These components define the agent execution contract, capture execution traces, and record tool usage.
 
-### 1. Evaluators (`src/evaluators/`)
+Metrics in src/metrics calculate various performance metrics. AccuracyMetric measures correctness, EfficiencyMetric measures resource usage, SafetyMetric detects unsafe content, CoherenceMetric measures logical consistency, and AdaptabilityMetric measures context adaptation. Each metric is independent and implements a collect method, following a consistent design pattern.
 
-**Purpose**: Orchestrate evaluation workflows and aggregate metrics.
+Benchmarks in src/benchmarks provide test tasks and scenarios. BaseBenchmark defines the abstract benchmark interface, TaskBenchmark implements the standard task benchmark, and Task represents individual tasks. These components load and manage task sets, provide task metadata, and validate task results.
 
-**Key Classes:**
-- `BaseEvaluator`: Abstract base class defining evaluation interface
-- `AgentEvaluator`: Main evaluator implementing comprehensive evaluation logic
+RL training components in src/rl fine-tune agent parameters using reinforcement learning. PolicyNetwork handles parameter adjustment, AgentPolicy wraps the policy to apply it to parameters, RLTrainer orchestrates training, and AgentParameters defines the tunable parameter set. Features include adaptive learning rates, experience replay, momentum-based updates, and multi-objective optimization.
 
-**Responsibilities:**
-- Execute agents on tasks
-- Collect metrics from multiple sources
-- Calculate overall scores
-- Determine success/failure
+Utilities in src/utils provide shared helpers. The config module handles centralized configuration management, validation provides input validation utilities, and logger sets up logging infrastructure.
 
-### 2. Agents (`src/agents/`)
+Data flows from tasks through agents to execution traces, then through metrics to evaluation results. The RL trainer can adjust parameters based on results, creating an improved agent that feeds back into the system.
 
-**Purpose**: Define agent interface and execution tracing.
+Design principles guide the architecture. Everything is explicit and traceable with no black boxes. The system is modular and extensible so each component can be extended or replaced independently. Behavior is controlled through configuration rather than code changes. Type hints throughout provide better IDE support and error detection. Clear interfaces make testing straightforward.
 
-**Key Classes:**
-- `BaseAgent`: Abstract interface for agents
-- `AgentExecutionTrace`: Tracks execution steps
-- `AgentTracer`: Automatic tracing wrapper
+To add a new metric, create a class in src/metrics that implements the collect method taking agent, task, result, and trace parameters, then return a dictionary with metric values and register it in AgentEvaluator._calculate_all_metrics. To add a new benchmark, extend BaseBenchmark, implement load_tasks, create a task configuration file, and use TaskBenchmark.load to load it. To create a custom agent, extend BaseAgent, implement execute with task and trace parameters, optionally record steps in the trace, and return the task result.
 
-**Responsibilities:**
-- Define agent execution contract
-- Capture execution traces
-- Record tool usage
+Configuration flows through multiple layers with clear priority. Defaults are hardcoded in Config._load_defaults, files are loaded from configs/config.json, environment variables are loaded with prefix support, and runtime overrides can be set programmatically. Priority goes runtime over environment over file over defaults.
 
-### 3. Metrics (`src/metrics/`)
+Error handling is comprehensive. Validation errors are caught at input boundaries, execution errors are captured in EvaluationResult.error, and configuration errors are raised during initialization.
 
-**Purpose**: Calculate various performance metrics.
+Performance considerations include lightweight traces stored as dictionaries, lazy metric calculation, parallelizable batch evaluation, and distributable RL training.
 
-**Key Classes:**
-- `AccuracyMetric`: Measures correctness
-- `EfficiencyMetric`: Measures resource usage
-- `SafetyMetric`: Detects unsafe content
-- `CoherenceMetric`: Measures logical consistency
-- `AdaptabilityMetric`: Measures context adaptation
-
-**Design Pattern**: Each metric is independent and implements a `collect()` method.
-
-### 4. Benchmarks (`src/benchmarks/`)
-
-**Purpose**: Provide test tasks and scenarios.
-
-**Key Classes:**
-- `BaseBenchmark`: Abstract benchmark interface
-- `TaskBenchmark`: Standard task benchmark
-- `Task`: Individual task representation
-
-**Responsibilities:**
-- Load and manage task sets
-- Provide task metadata
-- Validate task results
-
-### 5. RL Training (`src/rl/`)
-
-**Purpose**: Fine-tune agent parameters using reinforcement learning.
-
-**Key Classes:**
-- `PolicyNetwork`: Policy network for parameter adjustment
-- `AgentPolicy`: Wrapper applying policy to parameters
-- `RLTrainer`: Training orchestrator
-- `AgentParameters`: Tunable parameter set
-
-**Features:**
-- Adaptive learning rates
-- Experience replay
-- Momentum-based updates
-- Multi-objective optimization
-
-### 6. Utilities (`src/utils/`)
-
-**Purpose**: Shared utilities and helpers.
-
-**Modules:**
-- `config.py`: Centralized configuration management
-- `validation.py`: Input validation utilities
-- `logger.py`: Logging setup
-
-## Data Flow
-
-```
-Task → Agent → Execution Trace → Metrics → Evaluation Result
-                ↓
-            RL Trainer → Parameter Adjustment → Improved Agent
-```
-
-## Design Principles
-
-### 1. Explicit and Traceable
-
-All calculations are explicit and documented. No black boxes.
-
-### 2. Modular and Extensible
-
-Each component can be extended or replaced independently.
-
-### 3. Configurable
-
-Behavior controlled through configuration, not code changes.
-
-### 4. Type-Safe
-
-Uses type hints throughout for better IDE support and error detection.
-
-### 5. Testable
-
-Clear interfaces make testing straightforward.
-
-## Extension Points
-
-### Adding a New Metric
-
-1. Create a new class in `src/metrics/`
-2. Implement `collect(agent, task, result, trace)` method
-3. Return dictionary with metric values
-4. Register in `AgentEvaluator._calculate_all_metrics()`
-
-### Adding a New Benchmark
-
-1. Extend `BaseBenchmark`
-2. Implement `load_tasks()` method
-3. Create task configuration file
-4. Use `TaskBenchmark.load()` to load
-
-### Creating a Custom Agent
-
-1. Extend `BaseAgent`
-2. Implement `execute(task, trace)` method
-3. Optionally record steps in trace
-4. Return task result
-
-## Configuration System
-
-Configuration flows through multiple layers:
-
-1. **Defaults**: Hardcoded in `Config._load_defaults()`
-2. **File**: Loaded from `configs/config.json`
-3. **Environment**: Loaded from environment variables
-4. **Runtime**: Can be overridden programmatically
-
-Priority: Runtime > Environment > File > Defaults
-
-## Error Handling
-
-- **Validation Errors**: Caught at input boundaries
-- **Execution Errors**: Captured in `EvaluationResult.error`
-- **Configuration Errors**: Raised during initialization
-
-## Performance Considerations
-
-- Traces are lightweight (dictionaries)
-- Metrics calculated lazily
-- Batch evaluation parallelizable
-- RL training can be distributed
-
-## Security
-
-- Input validation prevents injection
-- Safety metric detects harmful content
-- Configuration validation prevents misconfiguration
-- No arbitrary code execution
+Security measures include input validation to prevent injection, safety metrics that detect harmful content, configuration validation to prevent misconfiguration, and no arbitrary code execution.

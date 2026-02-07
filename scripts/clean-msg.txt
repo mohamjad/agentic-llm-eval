@@ -1,3 +1,0 @@
-Clean up requirements.txt and add script to remove co-author trailers
-
-

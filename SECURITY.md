@@ -1,41 +1,9 @@
 # Security Policy
 
-## Supported Versions
+We currently support versions 0.2.x and 0.1.x with security updates. Versions below 0.1 are not supported.
 
-We currently support the following versions with security updates:
+If you discover a security vulnerability, report it responsibly. Do not open a public issue. Email security details or create a private security advisory on GitHub. Include description of the vulnerability, steps to reproduce, potential impact, and suggested fix if any. We will respond within 48 hours and work with you to address the issue before public disclosure.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.2.x   | :white_check_mark: |
-| 0.1.x   | :white_check_mark: |
-| < 0.1   | :x:                |
+Security best practices when using this framework include never committing API keys or tokens, using environment variables or secure credential storage instead, validating all inputs using the framework's validation utilities, reviewing execution traces for sensitive data before logging, keeping dependencies updated by regularly updating requirements.txt dependencies, and using HTTPS for all API calls.
 
-## Reporting a Vulnerability
-
-If you discover a security vulnerability, please report it responsibly:
-
-1. **Do NOT** open a public issue
-2. Email security details to: [Your Email] (or create a private security advisory on GitHub)
-3. Include:
-   - Description of the vulnerability
-   - Steps to reproduce
-   - Potential impact
-   - Suggested fix (if any)
-
-We will respond within 48 hours and work with you to address the issue before public disclosure.
-
-## Security Best Practices
-
-When using this framework:
-
-- **Never commit API keys or tokens** - Use environment variables or secure credential storage
-- **Validate all inputs** - The framework includes validation utilities; use them
-- **Review execution traces** - Check traces for sensitive data before logging
-- **Keep dependencies updated** - Regularly update `requirements.txt` dependencies
-- **Use HTTPS** - Always use secure connections for API calls
-
-## Known Security Considerations
-
-- The safety metric uses keyword detection which may have false positives/negatives
-- Execution traces may contain sensitive information - review before sharing
-- Configuration files may contain sensitive settings - keep them secure
+Known security considerations include the safety metric using keyword detection which may have false positives or false negatives, execution traces potentially containing sensitive information that should be reviewed before sharing, and configuration files potentially containing sensitive settings that should be kept secure.

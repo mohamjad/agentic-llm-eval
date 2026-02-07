@@ -1,125 +1,27 @@
 # RL-based fine-tuning guide
 
-how to use reinforcement learning to fine-tune agent behavior.
+How to use reinforcement learning to fine-tune agent behavior.
 
-## overview
+The RL system adjusts agent parameters based on evaluation feedback to improve performance across different metrics. It works by evaluating the agent on tasks and calculating metrics, then using a policy network to calculate parameter adjustments based on those metrics, applying the updated parameters to the agent, repeating this process for multiple episodes, and updating policy weights based on improvements.
 
-the RL system adjusts agent parameters based on evaluation feedback to improve performance across different metrics.
+To get started, create an agent that supports parameters by extending BaseAgent and implementing execute. The agent should accept parameters through a set_parameters method. Setup involves creating the agent, an evaluator, and loading a benchmark. Then create an RLTrainer with the agent, evaluator, and benchmark, call train with the number of episodes, and use get_best_parameters to retrieve the optimal settings.
 
-## quick start
+Context_length ranges from 100 to 5000 and controls how much context the agent processes. It affects accuracy and efficiency. Higher values provide more context leading to better accuracy but slower execution, while lower values are faster but might miss important information.
 
-```python
-from src.rl import RLTrainer, AgentParameters
-from src.evaluators import AgentEvaluator
-from src.benchmarks import TaskBenchmark
-from src.agents.base import BaseAgent
+Temperature ranges from 0.1 to 2.0 and controls randomness and creativity. It affects coherence and adaptability. Lower values are more deterministic and precise, higher values are more creative and varied.
 
-# create agent that supports parameters
-class MyAgent(BaseAgent):
-    def __init__(self):
-        self.params = AgentParameters()
-    
-    def execute(self, task, trace=None):
-        # use self.params to adjust behavior
-        return {"result": "done"}
-    
-    def set_parameters(self, params_dict):
-        self.params = AgentParameters.from_dict(params_dict)
+Max_steps ranges from 1 to 50 and sets the maximum execution steps. It affects efficiency and accuracy. Higher values allow more thorough execution but are slower, lower values are faster but might be incomplete.
 
-# setup
-agent = MyAgent()
-evaluator = AgentEvaluator()
-benchmark = TaskBenchmark.load("standard_tasks")
+Tool_usage_threshold ranges from 0.0 to 1.0 and controls when to use tools. It affects tool_usage and efficiency. Higher values use tools more conservatively, lower values use tools more aggressively.
 
-# train
-trainer = RLTrainer(agent, evaluator, benchmark)
-result = trainer.train(episodes=10)
+Reasoning_depth ranges from 1 to 10 and controls depth of reasoning steps. It affects coherence and adaptability. Higher values enable deeper reasoning, lower values are faster but less thorough.
 
-# get best parameters
-best_params = trainer.get_best_parameters()
-```
+The policy network maps metrics to parameter adjustments. Low accuracy triggers increases in context_length and max_steps. Low efficiency triggers decreases in max_steps and tool_usage_threshold. Low coherence triggers increases in reasoning_depth and temperature adjustments. Low adaptability triggers increases in temperature and reasoning_depth. Weights are updated based on actual improvements during training.
 
-## how it works
+Training parameters include episodes for number of training iterations defaulting to 10, tasks_per_episode for tasks per episode where None means all, learning_rate for how fast parameters adjust defaulting to 0.01, and update_policy for whether to update policy weights defaulting to True.
 
-1. **evaluate**: agent runs on tasks, metrics are calculated
-2. **adjust**: policy network calculates parameter adjustments based on metrics
-3. **apply**: parameters are updated on agent
-4. **repeat**: process repeats for multiple episodes
-5. **learn**: policy weights update based on improvements
+See examples/rl_training_example.py for complete RL training example. See examples/parameter_impact_example.py for testing how parameters affect behavior.
 
-## tunable parameters
+Best practices include starting with default parameters, training on diverse task sets, monitoring improvement per episode, using best parameters from training history, and testing on held-out tasks.
 
-### context_length
-how much context the agent processes (100-5000).
-
-- **affects**: accuracy, efficiency
-- **higher**: more context = better accuracy but slower
-- **lower**: faster but might miss info
-
-### temperature
-randomness/creativity (0.1-2.0).
-
-- **affects**: coherence, adaptability
-- **lower**: more deterministic, precise
-- **higher**: more creative, varied
-
-### max_steps
-maximum execution steps (1-50).
-
-- **affects**: efficiency, accuracy
-- **higher**: more thorough but slower
-- **lower**: faster but might be incomplete
-
-### tool_usage_threshold
-when to use tools (0.0-1.0).
-
-- **affects**: tool_usage, efficiency
-- **higher**: use tools conservatively
-- **lower**: use tools aggressively
-
-### reasoning_depth
-depth of reasoning steps (1-10).
-
-- **affects**: coherence, adaptability
-- **higher**: deeper reasoning
-- **lower**: faster but less thorough
-
-## policy network
-
-the policy network maps metrics to parameter adjustments:
-
-- low accuracy → increase context_length, max_steps
-- low efficiency → decrease max_steps, tool_usage_threshold
-- low coherence → increase reasoning_depth, adjust temperature
-- low adaptability → increase temperature, reasoning_depth
-
-weights are updated based on actual improvements during training.
-
-## training parameters
-
-- **episodes**: number of training iterations (default: 10)
-- **tasks_per_episode**: tasks per episode (None = all)
-- **learning_rate**: how fast parameters adjust (default: 0.01)
-- **update_policy**: whether to update policy weights (default: True)
-
-## examples
-
-see `examples/rl_training_example.py` for complete RL training example.
-
-see `examples/parameter_impact_example.py` for testing how parameters affect behavior.
-
-## best practices
-
-1. start with default parameters
-2. train on diverse task set
-3. monitor improvement per episode
-4. use best parameters from training history
-5. test on held-out tasks
-
-## interpreting results
-
-- **improvement > 0**: parameters are helping
-- **improvement ≈ 0**: parameters stable, might be converged
-- **improvement < 0**: might need to adjust learning rate or reset
-
-check `training_history` for detailed per-episode metrics.
+Interpreting results involves understanding that improvement greater than zero means parameters are helping, improvement approximately zero means parameters are stable and might be converged, and improvement less than zero might need learning rate adjustment or reset. Check training_history for detailed per-episode metrics.

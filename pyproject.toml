@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentic-llm-eval"
-version = "0.2.0"
+version = "0.3.0"
 description = "A comprehensive framework for evaluating agentic LLM behavior"
 readme = "README.md"
 requires-python = ">=3.10"

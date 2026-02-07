@@ -12,7 +12,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="agentic-llm-eval",
-    version="0.2.0",
+    version="0.3.0",
     author="mohamjad",
     description="A comprehensive framework for evaluating agentic LLM behavior",
     long_description=long_description,

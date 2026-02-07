@@ -2,79 +2,14 @@
 
 This directory contains example scripts demonstrating how to use the agentic-llm-eval framework.
 
-## Available Examples
+simple_evaluation.py shows the basic evaluation workflow by evaluating a simple agent on standard tasks. Run it with python examples/simple_evaluation.py. It demonstrates creating a custom agent, setting up an evaluator, running evaluation on tasks, and viewing detailed results.
 
-### `simple_evaluation.py`
-Basic evaluation workflow - evaluates a simple agent on standard tasks.
+rl_training_example.py shows RL-based fine-tuning by using reinforcement learning to improve agent parameters. Run it with python examples/rl_training_example.py. It demonstrates creating a parameterized agent, setting up RL trainer, training over multiple episodes, and tracking performance improvements.
 
-**Run:**
-```bash
-python examples/simple_evaluation.py
-```
+parameter_impact_example.py demonstrates how different agent parameters affect performance metrics. Run it with python examples/parameter_impact_example.py. It demonstrates testing different parameter values, comparing metric impacts, and understanding parameter trade-offs.
 
-**What it demonstrates:**
-- Creating a custom agent
-- Setting up an evaluator
-- Running evaluation on tasks
-- Viewing detailed results
+advanced_features.py demonstrates advanced capabilities including neural network RL, semantic metrics, Bayesian optimization, and statistical analysis. Run it with python examples/advanced_features.py. It requires torch for neural network RL, sentence-transformers for semantic metrics, scikit-optimize for Bayesian optimization, and scipy for statistical analysis. It demonstrates neural network-based policy optimization using PPO, semantic similarity using transformer embeddings, Bayesian hyperparameter optimization, and statistical significance testing.
 
-### `rl_training_example.py`
-RL-based fine-tuning - shows how to use reinforcement learning to improve agent parameters.
+To create your own agent, extend BaseAgent and implement the execute method. The agent receives a task and optional trace parameter. If you want automatic tracing, use the trace parameter to record steps. Return a result dictionary. Then evaluate it using AgentEvaluator with a TaskBenchmark.
 
-**Run:**
-```bash
-python examples/rl_training_example.py
-```
-
-**What it demonstrates:**
-- Creating a parameterized agent
-- Setting up RL trainer
-- Training over multiple episodes
-- Tracking performance improvements
-
-### `parameter_impact_example.py`
-Parameter testing - demonstrates how different agent parameters affect performance metrics.
-
-**Run:**
-```bash
-python examples/parameter_impact_example.py
-```
-
-**What it demonstrates:**
-- Testing different parameter values
-- Comparing metric impacts
-- Understanding parameter trade-offs
-
-## Creating Your Own Agent
-
-```python
-from src.agents.base import BaseAgent, AgentExecutionTrace
-from src.evaluators import AgentEvaluator
-from src.benchmarks import TaskBenchmark
-
-class MyAgent(BaseAgent):
-    def execute(self, task, trace: AgentExecutionTrace = None):
-        # Your agent logic here
-        if trace:
-            trace.add_step(
-                action_type="reasoning",
-                action_name="think",
-                input_data={"task": task.input},
-                output_data={"thought": "..."},
-                duration=0.1
-            )
-        return {"result": "done"}
-
-# Evaluate
-evaluator = AgentEvaluator()
-benchmark = TaskBenchmark.load("standard_tasks")
-agent = MyAgent()
-results = evaluator.evaluate_batch(agent, benchmark.tasks)
-```
-
-## Next Steps
-
-- Read the [API Documentation](../docs/API.md) for detailed API reference
-- Check [Architecture Documentation](../docs/ARCHITECTURE.md) for design details
-- See [METRICS.md](../METRICS.md) for metric explanations
-- Review [RL_GUIDE.md](../RL_GUIDE.md) for RL training guidance
+Next steps include reading the API Documentation in docs/API.md for detailed API reference, checking Architecture Documentation in docs/ARCHITECTURE.md for design details, seeing METRICS.md for metric explanations, and reviewing RL_GUIDE.md for RL training guidance.
