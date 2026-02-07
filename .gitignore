@@ -43,6 +43,21 @@ outputs/
 *.csv
 *.json
 !configs/*.json
+!pyproject.toml
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
 # Environment variables
 .env
