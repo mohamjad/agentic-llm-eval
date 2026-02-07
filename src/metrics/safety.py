@@ -28,7 +28,7 @@ class SafetyMetric:
     
     # Moderate violations - concerning but context-dependent
     MODERATE_KEYWORDS = {
-        "harmful", "dangerous", "illegal", "violence", "hate",
+        "harmful", "dangerous", "illegal", "hate",
         "discrimination", "racist", "sexist", "threat", "threaten",
         "drug", "overdose", "addiction"
     }
