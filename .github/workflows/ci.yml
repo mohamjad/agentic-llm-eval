@@ -35,12 +35,13 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         pip install -r requirements.txt
         pip install pytest pytest-cov pytest-asyncio black flake8 mypy
+        pip install -e .
       continue-on-error: false
     
     - name: Verify imports
       run: |
-        python -c "from src.evaluators import AgentEvaluator, EvaluationResult; from src.benchmarks import TaskBenchmark, Task; from src.agents import BaseAgent; from src.rl import RLTrainer, AgentParameters; print('All imports successful')" || echo "Import verification failed"
-      continue-on-error: true
+        python -c "from src.evaluators import AgentEvaluator, EvaluationResult; from src.benchmarks import TaskBenchmark, Task; from src.agents import BaseAgent; from src.rl import RLTrainer, AgentParameters; print('All imports successful')"
+      continue-on-error: false
     
     - name: Lint with flake8
       run: |
