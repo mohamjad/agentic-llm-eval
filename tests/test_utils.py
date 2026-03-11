@@ -48,8 +48,8 @@ def test_config_validate_rejects_bad_threshold():
         config.validate()
 
 
-def test_validate_agent_parameters_rejects_out_of_bounds_values():
-    params = AgentParameters(context_length=50)
+def test_validate_agent_parameters_rejects_wrong_type():
+    params = {"context_length": 50}
 
     with pytest.raises(ValidationError):
         validate_agent_parameters(params)

@@ -9,5 +9,5 @@ from .config import load_config
 try:
     from .statistics import StatisticalAnalyzer
     __all__ = ["setup_logger", "load_config", "StatisticalAnalyzer"]
-except ImportError:
+except Exception:
     __all__ = ["setup_logger", "load_config"]

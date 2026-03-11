@@ -18,6 +18,8 @@ def setup_logger(name: str = "agentic_llm_eval", level: Optional[int] = None) ->
         )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        logger.setLevel(level)
+    
+    logger.setLevel(level)
+    logger.propagate = False
     
     return logger
