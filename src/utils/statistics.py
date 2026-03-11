@@ -36,6 +36,9 @@ class StatisticalAnalyzer:
         data_array = np.array(data)
         n = len(data_array)
         mean = np.mean(data_array)
+        if n == 1:
+            scalar_mean = float(mean)
+            return scalar_mean, scalar_mean, scalar_mean
         std = np.std(data_array, ddof=1)  # Sample standard deviation
         
         # Standard error
@@ -73,7 +76,22 @@ class StatisticalAnalyzer:
             return {
                 "statistic": 0.0,
                 "pvalue": 1.0,
-                "significant": False
+                "significant": False,
+                "mean1": 0.0,
+                "mean2": 0.0,
+                "std1": 0.0,
+                "std2": 0.0
+            }
+        
+        if len(sample1) < 2 or len(sample2) < 2:
+            return {
+                "statistic": 0.0,
+                "pvalue": 1.0,
+                "significant": False,
+                "mean1": float(np.mean(sample1)),
+                "mean2": float(np.mean(sample2)),
+                "std1": 0.0,
+                "std2": 0.0
             }
         
         # Perform t-test
@@ -112,14 +130,18 @@ class StatisticalAnalyzer:
         
         mean1 = np.mean(sample1)
         mean2 = np.mean(sample2)
-        std1 = np.std(sample1, ddof=1)
-        std2 = np.std(sample2, ddof=1)
+        std1 = np.std(sample1, ddof=1) if len(sample1) > 1 else 0.0
+        std2 = np.std(sample2, ddof=1) if len(sample2) > 1 else 0.0
         
         # Pooled standard deviation
         n1, n2 = len(sample1), len(sample2)
-        pooled_std = np.sqrt(
-            ((n1 - 1) * std1**2 + (n2 - 1) * std2**2) / (n1 + n2 - 2)
-        )
+        pooled_denominator = n1 + n2 - 2
+        if pooled_denominator <= 0:
+            pooled_std = 0.0
+        else:
+            pooled_std = np.sqrt(
+                ((n1 - 1) * std1**2 + (n2 - 1) * std2**2) / pooled_denominator
+            )
         
         # Cohen's d
         cohens_d = (mean1 - mean2) / pooled_std if pooled_std > 0 else 0.0
