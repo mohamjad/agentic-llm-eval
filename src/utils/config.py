@@ -51,7 +51,7 @@ class Config:
                 "accuracy": 0.4,
                 "efficiency": 0.3,
                 "tool_usage": 0.2,
-                "safety": 0.1
+                "safety_score": 0.1
             }
         })
         

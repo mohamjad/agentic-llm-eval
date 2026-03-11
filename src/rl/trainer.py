@@ -6,13 +6,13 @@ from ..evaluators import AgentEvaluator
 from ..benchmarks import TaskBenchmark
 from .policy import PolicyNetwork, AgentPolicy, AgentParameters
 
-# Optional neural network support
-try:
-    from .neural_policy import DeepPolicyNetwork
-    NEURAL_AVAILABLE = True
-except ImportError:
-    NEURAL_AVAILABLE = False
-    DeepPolicyNetwork = None
+def _load_deep_policy_network():
+    """Import the optional neural policy only when explicitly requested."""
+    try:
+        from .neural_policy import DeepPolicyNetwork
+        return DeepPolicyNetwork
+    except Exception:
+        return None
 
 
 class RLTrainer:
@@ -43,10 +43,11 @@ class RLTrainer:
         self.agent = agent
         self.evaluator = evaluator
         self.benchmark = benchmark
-        self.use_neural_network = use_neural_network and NEURAL_AVAILABLE
+        deep_policy_cls = _load_deep_policy_network() if use_neural_network else None
+        self.use_neural_network = bool(use_neural_network and deep_policy_cls is not None)
         
         if self.use_neural_network:
-            self.policy_network = DeepPolicyNetwork(device=device)
+            self.policy_network = deep_policy_cls(device=device)
         else:
             self.policy_network = PolicyNetwork(learning_rate=learning_rate)
             self.agent_policy = AgentPolicy(self.policy_network)

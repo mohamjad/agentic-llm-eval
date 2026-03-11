@@ -13,7 +13,7 @@ try:
         "AccuracyMetric", "EfficiencyMetric", "SafetyMetric",
         "CoherenceMetric", "AdaptabilityMetric", "SemanticMetric"
     ]
-except ImportError:
+except Exception:
     __all__ = [
         "AccuracyMetric", "EfficiencyMetric", "SafetyMetric",
         "CoherenceMetric", "AdaptabilityMetric"

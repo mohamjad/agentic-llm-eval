@@ -11,5 +11,5 @@ try:
         "RLTrainer", "PolicyNetwork", "AgentPolicy", "AgentParameters",
         "DeepPolicyNetwork", "BayesianParameterOptimizer"
     ]
-except ImportError:
+except Exception:
     __all__ = ["RLTrainer", "PolicyNetwork", "AgentPolicy", "AgentParameters"]
