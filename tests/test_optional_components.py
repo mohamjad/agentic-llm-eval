@@ -39,11 +39,13 @@ class FakeSentenceTransformer:
     def encode(self, texts, convert_to_numpy=True, show_progress_bar=False):
         rows = []
         for text in texts:
-            rows.append([
-                float(len(text)),
-                float(sum(1 for char in text.lower() if char in "aeiou")),
-                float(len(set(text.split()))),
-            ])
+            rows.append(
+                [
+                    float(len(text)),
+                    float(sum(1 for char in text.lower() if char in "aeiou")),
+                    float(len(set(text.split()))),
+                ]
+            )
         return np.array(rows, dtype=float)
 
 

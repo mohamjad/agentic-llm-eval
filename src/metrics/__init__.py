@@ -9,12 +9,7 @@ from .adaptability import AdaptabilityMetric
 # Optional semantic metrics
 try:
     from .semantic import SemanticMetric
-    __all__ = [
-        "AccuracyMetric", "EfficiencyMetric", "SafetyMetric",
-        "CoherenceMetric", "AdaptabilityMetric", "SemanticMetric"
-    ]
+
+    __all__ = ["AccuracyMetric", "EfficiencyMetric", "SafetyMetric", "CoherenceMetric", "AdaptabilityMetric", "SemanticMetric"]
 except Exception:
-    __all__ = [
-        "AccuracyMetric", "EfficiencyMetric", "SafetyMetric",
-        "CoherenceMetric", "AdaptabilityMetric"
-    ]
+    __all__ = ["AccuracyMetric", "EfficiencyMetric", "SafetyMetric", "CoherenceMetric", "AdaptabilityMetric"]

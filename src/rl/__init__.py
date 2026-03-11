@@ -7,9 +7,14 @@ from .policy import PolicyNetwork, AgentPolicy, AgentParameters
 try:
     from .neural_policy import DeepPolicyNetwork
     from .bayesian_optimizer import BayesianParameterOptimizer
+
     __all__ = [
-        "RLTrainer", "PolicyNetwork", "AgentPolicy", "AgentParameters",
-        "DeepPolicyNetwork", "BayesianParameterOptimizer"
+        "RLTrainer",
+        "PolicyNetwork",
+        "AgentPolicy",
+        "AgentParameters",
+        "DeepPolicyNetwork",
+        "BayesianParameterOptimizer",
     ]
 except Exception:
     __all__ = ["RLTrainer", "PolicyNetwork", "AgentPolicy", "AgentParameters"]
