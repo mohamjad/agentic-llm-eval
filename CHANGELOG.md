@@ -1,16 +1,19 @@
 # Changelog
 
+## [0.3.1] - 2026-03-11
+
+Clarified repository scope and public documentation so the project is described
+as a lightweight evaluation toolkit with optional experimental components.
+
+Removed tracked git-history rewrite utilities from version control and added
+ignore rules to keep commit-date manipulation artifacts out of future changes.
+
 ## [0.3.0] - 2026-02-07
 
-Added deep neural network RL with PyTorch-based policy network including proper forward and backward passes, value network for advantage estimation, PPO implementation, Generalized Advantage Estimation, experience replay with batch training, gradient clipping and adaptive learning rates.
+Added optional neural policy components, semantic metrics, parameter-search
+helpers, and statistics utilities.
 
-Added semantic metrics using sentence transformer embeddings for semantic similarity, cosine similarity calculations, semantic coherence across trace sequences, topic consistency analysis, and embedding cache for performance.
-
-Added Bayesian optimization with Gaussian Process regression using RBF kernel, Expected Improvement acquisition function, hyperparameter space definition, and uncertainty estimation.
-
-Added statistical analysis with confidence intervals using t-distribution, independent samples t-test, Cohen's d effect size calculation, bootstrap sampling, and agent comparison utilities.
-
-Added theoretical foundations with comprehensive mathematical documentation in docs/THEORY.md including PPO algorithm derivation, GAE advantage estimation formulas, Bayesian optimization theory, statistical test formulations, convergence analysis, and academic references.
+Expanded the test suite, validation logic, and configuration handling.
 
 ## [0.2.0] - 2026-02-07
 

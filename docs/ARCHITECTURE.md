@@ -1,29 +1,58 @@
-# Architecture Documentation
+# Architecture
 
-The agentic-llm-eval framework uses a modular, extensible architecture that separates concerns and enables easy customization. Everything is designed to be explicit and traceable, with clear interfaces between components.
+The package is organized around a simple pipeline:
 
-Evaluators live in src/evaluators and orchestrate evaluation workflows while aggregating metrics. BaseEvaluator defines the abstract evaluation interface, while AgentEvaluator implements the comprehensive evaluation logic. These components execute agents on tasks, collect metrics from multiple sources, calculate overall scores, and determine success or failure.
+1. Load tasks from a benchmark
+2. Run an agent against those tasks
+3. Capture an execution trace
+4. Score the result with independent metrics
+5. Aggregate the metrics into a final evaluation result
 
-Agents are defined in src/agents and provide the interface for agent execution along with execution tracing. BaseAgent is the abstract interface that agents must implement. AgentExecutionTrace tracks execution steps, and AgentTracer provides automatic tracing wrappers. These components define the agent execution contract, capture execution traces, and record tool usage.
+## Core Modules
 
-Metrics in src/metrics calculate various performance metrics. AccuracyMetric measures correctness, EfficiencyMetric measures resource usage, SafetyMetric detects unsafe content, CoherenceMetric measures logical consistency, and AdaptabilityMetric measures context adaptation. Each metric is independent and implements a collect method, following a consistent design pattern.
+`src/evaluators`
+: Orchestrates evaluation and score aggregation.
 
-Benchmarks in src/benchmarks provide test tasks and scenarios. BaseBenchmark defines the abstract benchmark interface, TaskBenchmark implements the standard task benchmark, and Task represents individual tasks. These components load and manage task sets, provide task metadata, and validate task results.
+`src/agents`
+: Defines the base agent interface and trace objects.
 
-RL training components in src/rl fine-tune agent parameters using reinforcement learning. PolicyNetwork handles parameter adjustment, AgentPolicy wraps the policy to apply it to parameters, RLTrainer orchestrates training, and AgentParameters defines the tunable parameter set. Features include adaptive learning rates, experience replay, momentum-based updates, and multi-objective optimization.
+`src/benchmarks`
+: Loads task sets and exposes benchmark/task abstractions.
 
-Utilities in src/utils provide shared helpers. The config module handles centralized configuration management, validation provides input validation utilities, and logger sets up logging infrastructure.
+`src/metrics`
+: Implements individual scoring functions.
 
-Data flows from tasks through agents to execution traces, then through metrics to evaluation results. The RL trainer can adjust parameters based on results, creating an improved agent that feeds back into the system.
+`src/rl`
+: Contains parameter-tuning helpers and optional experimental modules.
 
-Design principles guide the architecture. Everything is explicit and traceable with no black boxes. The system is modular and extensible so each component can be extended or replaced independently. Behavior is controlled through configuration rather than code changes. Type hints throughout provide better IDE support and error detection. Clear interfaces make testing straightforward.
+`src/utils`
+: Configuration, validation, logging, and statistics support.
 
-To add a new metric, create a class in src/metrics that implements the collect method taking agent, task, result, and trace parameters, then return a dictionary with metric values and register it in AgentEvaluator._calculate_all_metrics. To add a new benchmark, extend BaseBenchmark, implement load_tasks, create a task configuration file, and use TaskBenchmark.load to load it. To create a custom agent, extend BaseAgent, implement execute with task and trace parameters, optionally record steps in the trace, and return the task result.
+## Design Goals
 
-Configuration flows through multiple layers with clear priority. Defaults are hardcoded in Config._load_defaults, files are loaded from configs/config.json, environment variables are loaded with prefix support, and runtime overrides can be set programmatically. Priority goes runtime over environment over file over defaults.
+- Keep the baseline path readable and easy to test
+- Separate task execution from scoring logic
+- Allow optional dependencies without breaking the base package
+- Favor explicit data structures over hidden state
 
-Error handling is comprehensive. Validation errors are caught at input boundaries, execution errors are captured in EvaluationResult.error, and configuration errors are raised during initialization.
+## Extension Points
 
-Performance considerations include lightweight traces stored as dictionaries, lazy metric calculation, parallelizable batch evaluation, and distributable RL training.
+To add a metric, implement a metric class and register it with the evaluator.
 
-Security measures include input validation to prevent injection, safety metrics that detect harmful content, configuration validation to prevent misconfiguration, and no arbitrary code execution.
+To add a benchmark, extend the benchmark abstraction and provide task-loading
+logic.
+
+To add a custom agent, subclass `BaseAgent` and implement `execute`.
+
+## Notes on Optional Modules
+
+The repo includes optional semantic, Bayesian, and neural components. They sit
+off the main path on purpose:
+
+- the base evaluator works without them
+- imports degrade gracefully when optional packages are missing
+- tests cover the lightweight path first and treat optional modules as additive
+
+That structure is deliberate. The project's main value is the evaluation
+harness and traceable scoring flow, not the claim that every optional module is
+a production-ready research system.

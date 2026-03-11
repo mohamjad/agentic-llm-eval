@@ -5,15 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "agentic-llm-eval"
 version = "0.3.0"
-description = "A comprehensive framework for evaluating agentic LLM behavior"
+description = "Lightweight tools for evaluating agent-like LLM workflows"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
     {name = "mohamjad", email = "mohammedamjad526@gmail.com"}
 ]
-urls = { Documentation = "https://github.com/mohamjad/agentic-llm-eval/tree/main/docs", Source = "https://github.com/mohamjad/agentic-llm-eval", Issues = "https://github.com/mohamjad/agentic-llm-eval/issues" }
-keywords = ["llm", "evaluation", "agents", "reinforcement-learning", "ai", "benchmark"]
+urls = { Documentation = "https://github.com/mohamjad/agentic-llm-eval/tree/master/docs", Source = "https://github.com/mohamjad/agentic-llm-eval", Issues = "https://github.com/mohamjad/agentic-llm-eval/issues" }
+keywords = ["llm", "evaluation", "agents", "benchmark", "tracing", "tooling"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

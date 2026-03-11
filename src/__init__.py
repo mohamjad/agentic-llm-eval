@@ -1,9 +1,9 @@
 """
-Agentic LLM Behavior Evaluation Framework
+Lightweight tools for evaluating agent-like LLM workflows.
 
-A comprehensive framework for evaluating agentic LLM behavior with RL-based
-fine-tuning. Tracks accuracy, efficiency, safety, coherence, adaptability,
-and tool usage with full execution traces.
+The package focuses on explicit traces, simple benchmarks, configurable metric
+aggregation, and optional experimental components that degrade gracefully when
+their heavy dependencies are unavailable.
 """
 
 __version__ = "0.3.0"

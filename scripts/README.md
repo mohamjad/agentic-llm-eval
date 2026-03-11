@@ -1,21 +1,8 @@
 # Scripts
 
-Utility scripts for development and maintenance.
+This repository does not ship git-history rewrite utilities or commit-timestamp
+tooling.
 
-## `remove-coauthors.sh`
-
-Removes "Co-authored-by: Cursor" trailers from git commit history.
-
-**Usage:**
-```bash
-bash scripts/remove-coauthors.sh
-git push --force origin master
-```
-
-**Warning:** This rewrites git history. Only use if you haven't shared the repo with others, or coordinate with your team first.
-
-## `create_commits.py`
-
-Script for creating realistic commit history. Used for development purposes.
-
-**Note:** This is a development utility and not part of the main package.
+If you add helper scripts for local development, keep them focused on testing,
+packaging, or release automation and avoid checking in scripts that modify
+commit metadata or fabricate repository history.

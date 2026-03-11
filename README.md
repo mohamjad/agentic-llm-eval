@@ -1,25 +1,92 @@
-# agentic llm behavior evaluation
+# agentic-llm-eval
 
-A comprehensive framework for evaluating agentic LLM behavior with deep reinforcement learning, semantic analysis, and Bayesian optimization. Features neural network-based policy gradients (PPO), embedding-based metrics, statistical significance testing, and theoretical foundations.
+`agentic-llm-eval` is a lightweight Python toolkit for running repeatable agent
+evaluations with explicit traces, simple benchmark tasks, and configurable
+scoring.
 
-The framework evaluates agents on tasks using multiple metrics like accuracy, efficiency, safety, coherence, adaptability, and tool usage. It captures full execution traces, uses deep reinforcement learning to fine-tune agent behavior through neural network-based policy optimization with proper backpropagation. It includes semantic similarity metrics using transformer embeddings, Bayesian optimization for hyperparameter tuning, and statistical significance testing with confidence intervals. The system adjusts model parameters based on performance feedback and aggregates everything into an overall score. All calculations are explicit and traceable, so you can see exactly how scores are computed.
+The core package is intentionally small:
 
-To get started, create an agent by extending BaseAgent and implementing the execute method. The evaluator wraps your agent, runs it on tasks, and tracks everything. Each step gets recorded in a trace, metrics are calculated separately, scores are combined using configurable weights, and success is determined by score threshold plus task-specific checks. The math is explicit with no black boxes.
+- `AgentEvaluator` runs an agent against one or more tasks
+- `AgentExecutionTrace` records step-by-step execution data
+- metrics score outputs for accuracy, efficiency, safety, coherence,
+  adaptability, and tool usage
+- optional modules add semantic similarity, parameter search, and experimental
+  neural policy components when extra dependencies are installed
 
-Installation is straightforward. Run pip install -r requirements.txt to get all dependencies. The project structure is clean with source code in src, tests in tests, examples in examples, documentation in docs, and configuration files in configs.
+This project is best understood as an inspectable evaluation harness, not as a
+research benchmark or a claim of novel ML methodology. Several metrics are
+heuristic by design, and the optional RL and optimization modules are utilities
+for parameter tuning rather than a substitute for full-scale training systems.
 
-The evaluator can be configured with options like use_tracer for automatic tracing, success_threshold for minimum passing score, and metric_weights to customize how different metrics contribute to the overall score. By default accuracy gets 40% weight, efficiency 30%, tool usage 20%, and safety 10%, but you can adjust these to match your priorities.
+## Install
 
-Examples are provided in the examples directory. The simple_evaluation script shows basic usage, rl_training_example demonstrates RL-based fine-tuning, parameter_impact_example shows how to test parameter effects, and advanced_features covers neural network RL, semantic metrics, and Bayesian optimization.
+Install the base dependencies:
 
-For detailed metric explanations including how accuracy, efficiency, safety, coherence, and adaptability work, see METRICS.md. That document also covers tunable agent parameters like context_length, temperature, max_steps, tool_usage_threshold, and reasoning_depth, along with how these parameters affect behavior and what RL training parameters are available.
+```bash
+pip install -r requirements.txt
+```
 
-Testing is done with pytest. Run pytest tests/ -v for all tests, or pytest tests/ -v --cov=src --cov-report=html for coverage reports. You can also run specific test files like pytest tests/test_evaluator.py -v.
+Install developer tooling:
 
-Code quality checks use black for formatting, flake8 for linting, and mypy for type checking. Run black src tests to format, flake8 src tests to lint, mypy src to type check, or make quality to run all checks at once.
+```bash
+pip install -e .[dev]
+```
 
-For contribution guidelines see CONTRIBUTING.md. Architecture details are in docs/ARCHITECTURE.md. Complete API documentation is in docs/API.md. Mathematical foundations including PPO algorithm derivation, Generalized Advantage Estimation, Bayesian optimization theory, statistical test formulations, and convergence analysis are documented in docs/THEORY.md.
+## Quick Start
 
-The framework includes advanced capabilities like neural network RL using PyTorch-based policy and value networks with PPO, semantic metrics using transformer embeddings for semantic similarity, Bayesian optimization with Gaussian Process-based hyperparameter tuning, and statistical analysis with hypothesis testing, confidence intervals, and effect sizes. See examples/advanced_features.py for usage examples.
+```python
+from src.agents import BaseAgent
+from src.benchmarks import TaskBenchmark
+from src.evaluators import AgentEvaluator
 
-License is MIT.
+
+class DemoAgent(BaseAgent):
+    def execute(self, task, trace=None):
+        return {"output": task.expected_output}
+
+
+benchmark = TaskBenchmark.load("basic")
+evaluator = AgentEvaluator({"use_tracer": True})
+result = evaluator.evaluate(DemoAgent(), benchmark.tasks[0])
+
+print(result.score)
+print(result.metrics)
+```
+
+## What Is Included
+
+- Core evaluation flow with task benchmarks and structured results
+- Trace capture for agent actions and tool calls
+- Configurable metric weights and success thresholds
+- Optional semantic, Bayesian, and neural components behind graceful imports
+- Test, lint, and type-check pipelines for the supported code paths
+
+## What This Repo Does Not Claim
+
+- It is not a drop-in replacement for production-scale eval platforms
+- It does not present heuristic metrics as validated research instruments
+- It does not treat the optional neural path as the default or required workflow
+
+For a fuller description of the implementation and tradeoffs, see
+[`docs/METHODS_AND_LIMITATIONS.md`](docs/METHODS_AND_LIMITATIONS.md).
+
+## Development
+
+Run the local checks:
+
+```bash
+pytest -q
+black --check src tests
+flake8 src tests --max-line-length=127 --max-complexity=10
+mypy src --ignore-missing-imports
+```
+
+## Docs
+
+- [`docs/API.md`](docs/API.md)
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- [`docs/METHODS_AND_LIMITATIONS.md`](docs/METHODS_AND_LIMITATIONS.md)
+- [`METRICS.md`](METRICS.md)
+- [`RL_GUIDE.md`](RL_GUIDE.md)
+
+License: MIT.
