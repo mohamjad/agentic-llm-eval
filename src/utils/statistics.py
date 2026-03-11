@@ -53,7 +53,7 @@ class StatisticalAnalyzer:
         return mean, lower, upper
 
     @staticmethod
-    def t_test(sample1: List[float], sample2: List[float], alternative: str = "two-sided") -> Dict[str, float]:
+    def t_test(sample1: List[float], sample2: List[float], alternative: str = "two-sided") -> Dict[str, Any]:
         """
         Perform independent samples t-test
 
@@ -104,7 +104,7 @@ class StatisticalAnalyzer:
         }
 
     @staticmethod
-    def effect_size(sample1: List[float], sample2: List[float]) -> Dict[str, float]:
+    def effect_size(sample1: List[float], sample2: List[float]) -> Dict[str, Any]:
         """
         Compute Cohen's d effect size
 
@@ -169,18 +169,18 @@ class StatisticalAnalyzer:
         n = len(data_array)
 
         # Generate bootstrap samples
-        bootstrap_means = []
+        bootstrap_means: List[float] = []
         for _ in range(n_bootstrap):
             sample = np.random.choice(data_array, size=n, replace=True)
-            bootstrap_means.append(np.mean(sample))
+            bootstrap_means.append(float(np.mean(sample)))
 
-        bootstrap_means = np.array(bootstrap_means)
+        bootstrap_means_array = np.array(bootstrap_means)
 
         # Compute percentiles
         alpha = 1 - confidence
-        lower = np.percentile(bootstrap_means, 100 * alpha / 2)
-        upper = np.percentile(bootstrap_means, 100 * (1 - alpha / 2))
-        mean = np.mean(bootstrap_means)
+        lower = np.percentile(bootstrap_means_array, 100 * alpha / 2)
+        upper = np.percentile(bootstrap_means_array, 100 * (1 - alpha / 2))
+        mean = np.mean(bootstrap_means_array)
 
         return float(mean), float(lower), float(upper)
 

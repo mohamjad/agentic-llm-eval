@@ -335,8 +335,8 @@ class DeepPolicyNetwork:
         A_t = δ_t + (γλ)δ_{t+1} + (γλ)²δ_{t+2} + ...
         where δ_t = r_t + γV(s_{t+1}) - V(s_t)
         """
-        advantages = []
-        returns = []
+        advantages: List[float] = []
+        returns: List[float] = []
 
         gae = 0.0
         for t in reversed(range(len(rewards))):

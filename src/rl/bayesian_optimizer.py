@@ -193,7 +193,7 @@ class BayesianParameterOptimizer:
                     hist["params"]["reasoning_depth"] / 10,
                 ]
             )
-            distance = np.linalg.norm(param_vec - hist_vec)
+            distance = float(np.linalg.norm(param_vec - hist_vec))
             min_distance = min(min_distance, distance)
 
         # Uncertainty increases with distance

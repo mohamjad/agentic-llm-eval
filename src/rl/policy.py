@@ -7,20 +7,19 @@ Enhanced RL implementation with:
 - Experience replay buffer
 """
 
-from typing import Any, Dict, List
-from dataclasses import dataclass, field
-
-try:
-    import numpy as np
-except ImportError:
-    # Fallback if numpy not available
-    class np:
-        @staticmethod
-        def mean(values):
-            return sum(values) / len(values) if values else 0.0
-
-
 from collections import deque
+from dataclasses import dataclass, field
+from typing import Any, Deque, Dict, List
+
+import numpy as np
+
+
+def _mean(values: List[float]) -> float:
+    if not values:
+        return 0.0
+    if np is None:
+        return sum(values) / len(values)
+    return float(np.mean(values))
 
 
 @dataclass
@@ -101,7 +100,7 @@ class PolicyNetwork:
         self.velocity = {param: {metric: 0.0 for metric in metrics.keys()} for param, metrics in self.weights.items()}
 
         # Experience replay buffer
-        self.replay_buffer = deque(maxlen=replay_buffer_size)
+        self.replay_buffer: Deque[Experience] = deque(maxlen=replay_buffer_size)
 
         # Performance tracking
         self.update_count = 0
@@ -135,7 +134,7 @@ class PolicyNetwork:
             # Apply momentum for smoother updates
             if param_name in self.velocity:
                 # Average momentum across metrics
-                avg_velocity = np.mean([self.velocity[param_name].get(m, 0.0) for m in metric_weights.keys()])
+                avg_velocity = _mean([self.velocity[param_name].get(m, 0.0) for m in metric_weights.keys()])
                 adjustment = self.momentum * avg_velocity + (1 - self.momentum) * adjustment
 
             adjustments[param_name] = adjustment * self.current_learning_rate

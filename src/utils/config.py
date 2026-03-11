@@ -8,11 +8,12 @@ Provides a unified configuration interface with:
 - Configuration merging
 """
 
+from pathlib import Path
 import json
 import os
-from typing import Dict, Any, Optional, Union
-from pathlib import Path
-import yaml
+from typing import Any, Dict, Optional, Union
+
+import yaml  # type: ignore[import-untyped]
 
 
 class Config:
@@ -106,7 +107,7 @@ class Config:
         Returns:
             Self for method chaining
         """
-        env_config = {}
+        env_config: Dict[str, Any] = {}
 
         for key, value in os.environ.items():
             if key.startswith(prefix):
@@ -164,7 +165,7 @@ class Config:
             KeyError: If key not found and required=True
         """
         keys = key.split(".")
-        value = self._config
+        value: Any = self._config
 
         for k in keys:
             if isinstance(value, dict):

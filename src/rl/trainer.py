@@ -49,6 +49,7 @@ class RLTrainer:
         self.use_neural_network = bool(use_neural_network and deep_policy_cls is not None)
 
         if self.use_neural_network:
+            assert deep_policy_cls is not None
             self.policy_network = deep_policy_cls(device=device)
         else:
             self.policy_network = PolicyNetwork(learning_rate=learning_rate)

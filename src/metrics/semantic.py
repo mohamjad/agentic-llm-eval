@@ -6,7 +6,7 @@ Uses sentence transformers to compute semantic similarity between:
 - Trace steps for coherence analysis
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 import numpy as np
 
 try:
@@ -71,7 +71,7 @@ class SemanticMetric:
 
         embeddings = self.model.encode(texts, convert_to_numpy=True, show_progress_bar=False)
 
-        return embeddings
+        return cast(np.ndarray, embeddings)
 
     def cosine_similarity(self, embeddings1: np.ndarray, embeddings2: np.ndarray) -> np.ndarray:
         """
@@ -96,9 +96,9 @@ class SemanticMetric:
 
         # Compute cosine similarity
         if embeddings1.ndim == 1 and embeddings2.ndim == 1:
-            return np.dot(emb1_norm, emb2_norm)
+            return cast(np.ndarray, np.dot(emb1_norm, emb2_norm))
         else:
-            return np.dot(emb1_norm, emb2_norm.T)
+            return cast(np.ndarray, np.dot(emb1_norm, emb2_norm.T))
 
     def semantic_accuracy(self, expected: Any, actual: Any) -> float:
         """
@@ -124,7 +124,7 @@ class SemanticMetric:
         similarity = self.cosine_similarity(embeddings[0], embeddings[1])
 
         # Convert from [-1, 1] to [0, 1]
-        return (similarity + 1.0) / 2.0
+        return float((similarity + 1.0) / 2.0)
 
     def semantic_coherence(self, texts: List[str]) -> float:
         """
@@ -152,7 +152,7 @@ class SemanticMetric:
             similarities.append((sim + 1.0) / 2.0)  # Normalize to [0, 1]
 
         # Average coherence
-        return np.mean(similarities) if similarities else 0.0
+        return float(np.mean(similarities)) if similarities else 0.0
 
     def topic_consistency(self, task_description: str, response: str) -> float:
         """
@@ -171,7 +171,7 @@ class SemanticMetric:
         embeddings = self.encode([task_description, response])
         similarity = self.cosine_similarity(embeddings[0], embeddings[1])
 
-        return (similarity + 1.0) / 2.0
+        return float((similarity + 1.0) / 2.0)
 
     def collect(self, agent: Any, task: Any, result: Any, trace: List[Dict[str, Any]]) -> Dict[str, float]:
         """

@@ -25,7 +25,7 @@ class Task:
             return self._compare_dicts(self.expected_output, result)
 
         # Direct equality comparison for other types
-        return result == self.expected_output
+        return bool(result == self.expected_output)
 
     def _compare_dicts(self, expected: Dict[str, Any], actual: Dict[str, Any]) -> bool:
         """compare dicts - all expected keys must match"""
