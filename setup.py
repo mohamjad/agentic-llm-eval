@@ -14,6 +14,7 @@ setup(
     name="agentic-llm-eval",
     version="0.3.0",
     author="mohamjad",
+    author_email="mohammedamjad526@gmail.com",
     description="A comprehensive framework for evaluating agentic LLM behavior",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -33,6 +34,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
     python_requires=">=3.10",
@@ -41,9 +43,11 @@ setup(
         "dev": [
             "pytest>=7.4.0",
             "pytest-cov>=4.1.0",
+            "pytest-asyncio>=0.21.0",
             "mypy>=1.5.0",
             "black>=23.0.0",
             "flake8>=6.0.0",
+            "build>=1.2.0",
         ],
     },
 )

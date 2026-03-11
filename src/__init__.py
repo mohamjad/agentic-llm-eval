@@ -8,7 +8,7 @@ and tool usage with full execution traces.
 
 __version__ = "0.3.0"
 __author__ = "mohamjad"
-__email__ = ""
+__email__ = "mohammedamjad526@gmail.com"
 __url__ = "https://github.com/mohamjad/agentic-llm-eval"
 
 # Main exports for easy importing

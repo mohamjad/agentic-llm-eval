@@ -12,46 +12,88 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  unit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: "pip"
-        cache-dependency-path: |
-          requirements.txt
-          pyproject.toml
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip setuptools wheel
-        pip install -e . --no-deps
-        pip install build pytest pytest-cov pyyaml numpy scipy scikit-learn scikit-optimize
+      - uses: actions/checkout@v4
 
-    - name: Compile source
-      run: |
-        python -m compileall src tests
-    
-    - name: Run tests
-      run: |
-        pytest tests/ -v --cov=src --cov-branch --cov-report=xml --cov-report=term-missing --tb=short --maxfail=1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
+            pyproject.toml
+            setup.py
 
-    - name: Build distribution artifacts
-      if: matrix.python-version == '3.11'
-      run: |
-        python -m build --sdist --wheel
+      - name: Install unit-test dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -e . --no-deps
+          pip install pytest pytest-cov pytest-asyncio pyyaml numpy scipy scikit-learn scikit-optimize
 
-    - name: Upload coverage
-      if: matrix.python-version == '3.11'
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-xml
-        path: coverage.xml
+      - name: Compile source
+        run: |
+          python -m compileall src tests
+
+      - name: Run tests
+        run: |
+          pytest tests/ -v --cov=src --cov-branch --cov-report=xml --cov-report=term-missing --tb=short --maxfail=1
+
+      - name: Upload coverage
+        if: matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: pyproject.toml
+
+      - name: Install linting dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black flake8 mypy
+
+      - name: Check formatting with black
+        run: |
+          black --check src tests --line-length=127
+
+      - name: Lint with flake8
+        run: |
+          flake8 src tests --max-line-length=127 --max-complexity=10 --count
+
+      - name: Type check with mypy
+        run: |
+          mypy src --ignore-missing-imports
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: pyproject.toml
+
+      - name: Build distribution artifacts
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --sdist --wheel

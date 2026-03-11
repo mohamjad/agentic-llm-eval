@@ -10,8 +10,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "mohamjad"}
+    {name = "mohamjad", email = "mohammedamjad526@gmail.com"}
 ]
+urls = { Documentation = "https://github.com/mohamjad/agentic-llm-eval/tree/main/docs", Source = "https://github.com/mohamjad/agentic-llm-eval", Issues = "https://github.com/mohamjad/agentic-llm-eval/issues" }
 keywords = ["llm", "evaluation", "agents", "reinforcement-learning", "ai", "benchmark"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -29,9 +30,11 @@ classifiers = [
 dev = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
     "mypy>=1.5.0",
     "black>=23.0.0",
     "flake8>=6.0.0",
+    "build>=1.2.0",
 ]
 
 [tool.pytest.ini_options]
