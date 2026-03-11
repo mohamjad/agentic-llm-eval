@@ -1,10 +1,9 @@
-"""auto-trace agent execution"""
-
-from typing import Dict, Any, Optional, Callable
-from .base import BaseAgent, AgentExecutionTrace, TraceStep
-from datetime import datetime
-import time
 import functools
+import time
+from datetime import datetime
+from typing import Any, Callable, Optional
+
+from .base import AgentExecutionTrace, BaseAgent
 
 
 class AgentTracer:

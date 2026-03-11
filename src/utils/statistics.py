@@ -7,7 +7,7 @@ Provides statistical tests for evaluating agent performance:
 - Bootstrap sampling
 """
 
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Any, Dict, List, Tuple
 import numpy as np
 from scipy import stats
 

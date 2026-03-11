@@ -4,13 +4,12 @@ Uses Gaussian Process (GP) regression to model the performance landscape
 and optimize agent parameters efficiently.
 """
 
-from typing import Dict, Any, List, Optional, Tuple, Callable
+from typing import Any, Callable, Dict, List, Optional, Tuple
 import numpy as np
 
 try:
     from skopt import gp_minimize
-    from skopt.space import Real, Integer
-    from skopt.acquisition import gaussian_ei
+    from skopt.space import Integer, Real
 
     BAYESIAN_AVAILABLE = True
 except ImportError:

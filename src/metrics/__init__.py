@@ -8,7 +8,7 @@ from .adaptability import AdaptabilityMetric
 
 # Optional semantic metrics
 try:
-    from .semantic import SemanticMetric
+    from .semantic import SemanticMetric  # noqa: F401
 
     __all__ = ["AccuracyMetric", "EfficiencyMetric", "SafetyMetric", "CoherenceMetric", "AdaptabilityMetric", "SemanticMetric"]
 except Exception:

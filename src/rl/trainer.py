@@ -1,6 +1,6 @@
 """RL trainer for fine-tuning agent behavior"""
 
-from typing import Dict, Any, List, Optional, Callable
+from typing import Any, Dict, List, Optional
 from ..agents.base import BaseAgent
 from ..evaluators import AgentEvaluator
 from ..benchmarks import TaskBenchmark

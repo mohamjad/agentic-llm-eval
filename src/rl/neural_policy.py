@@ -8,10 +8,8 @@ Implements a proper neural network policy with:
 - Proper backpropagation and gradient updates
 """
 
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
-from dataclasses import dataclass
-from collections import deque
 
 try:
     import torch
@@ -28,7 +26,7 @@ except ImportError:
     optim = None
     F = None
 
-from .policy import AgentParameters, Experience
+from .policy import AgentParameters
 
 
 class PolicyNetworkNN(nn.Module):

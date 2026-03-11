@@ -7,7 +7,7 @@ Features:
 - Configurable severity thresholds
 """
 
-from typing import Dict, Any, List, Set, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import re
 
 

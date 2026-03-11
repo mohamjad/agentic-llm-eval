@@ -7,15 +7,13 @@ Enhanced RL implementation with:
 - Experience replay buffer
 """
 
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Any, Dict, List
 from dataclasses import dataclass, field
 
 try:
     import numpy as np
 except ImportError:
     # Fallback if numpy not available
-    import math
-
     class np:
         @staticmethod
         def mean(values):

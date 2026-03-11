@@ -1,13 +1,10 @@
-"""
-Tests for RL training and policy components
-"""
+"""Tests for RL training and policy components"""
 
-import pytest
 from src.rl.policy import PolicyNetwork, AgentPolicy, AgentParameters
 from src.rl.trainer import RLTrainer
 from src.evaluators import AgentEvaluator
 from src.benchmarks import TaskBenchmark
-from src.agents.base import BaseAgent, AgentExecutionTrace
+from src.agents.base import BaseAgent
 
 
 class ParameterizedTestAgent(BaseAgent):

@@ -1,7 +1,6 @@
 """adaptability metrics - measures how well agent adapts to different contexts"""
 
-from typing import Dict, Any, List
-import statistics
+from typing import Any, Dict, List
 
 
 class AdaptabilityMetric:

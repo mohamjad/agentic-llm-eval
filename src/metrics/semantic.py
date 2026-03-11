@@ -6,7 +6,7 @@ Uses sentence transformers to compute semantic similarity between:
 - Trace steps for coherence analysis
 """
 
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 import numpy as np
 
 try:

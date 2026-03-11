@@ -4,7 +4,7 @@ Tests for agent base classes and tracing
 
 import pytest
 from datetime import datetime
-from src.agents.base import BaseAgent, AgentExecutionTrace, TraceStep
+from src.agents.base import AgentExecutionTrace, BaseAgent
 from src.agents.tracer import AgentTracer
 from src.benchmarks import Task
 

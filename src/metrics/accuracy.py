@@ -1,6 +1,6 @@
 """accuracy metrics - compares results to expected outputs"""
 
-from typing import Dict, Any, List, Union
+from typing import Any, Dict, List
 
 
 class AccuracyMetric:

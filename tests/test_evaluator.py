@@ -5,7 +5,6 @@ These tests verify that the evaluator works correctly with explicit,
 explainable behavior.
 """
 
-import pytest
 from src.evaluators import AgentEvaluator, EvaluationResult
 from src.benchmarks import Task
 from src.agents.base import BaseAgent, AgentExecutionTrace

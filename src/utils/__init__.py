@@ -7,7 +7,7 @@ from .config import load_config
 
 # Optional statistical analysis
 try:
-    from .statistics import StatisticalAnalyzer
+    from .statistics import StatisticalAnalyzer  # noqa: F401
 
     __all__ = ["setup_logger", "load_config", "StatisticalAnalyzer"]
 except Exception:

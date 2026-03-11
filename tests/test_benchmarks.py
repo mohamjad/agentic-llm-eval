@@ -30,10 +30,10 @@ class TestTask:
         task = Task(id="test_003", description="Test", input={}, expected_output={"result": "success"})
 
         # Test with matching result
-        assert task.check_success({"result": "success"}) == True
+        assert task.check_success({"result": "success"}) is True
 
         # Test with non-matching result
-        assert task.check_success({"result": "failure"}) == False
+        assert task.check_success({"result": "failure"}) is False
 
 
 class TestTaskBenchmark:
